@@ -24,7 +24,11 @@ class Block {
     }
 
     generateHash() {
-        return SHA256(JSON.stringify(this)).toString();
+        let obj = {
+            ...this,
+            "hash": null,
+        };
+        return SHA256(JSON.stringify(obj)).toString();
     }
     
     /**
@@ -49,11 +53,7 @@ class Block {
             // Returning the Block is not valid
             
             // Returning the Block is valid
-            let hashAux = self.hash
-            self.hash = null
-            let recalcHash = self.generateHash()
-            if (recalcHash === hashAux) {
-                self.hash = hashAux
+            if (self.generateHash() === self.hash) {
                 resolve();
             } else {
                 reject(`recalculated hash ${recalcHash} !== currentHash ${currentHash}`);
