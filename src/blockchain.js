@@ -83,7 +83,9 @@ class Blockchain {
             block.hash = block.generateHash();
             self.chain.push(block);              
             self.height = height;
-            resolve(block);
+            self.validateChain()
+                .then(() => resolve(block))
+                .catch(errorLog => reject(errorLog)); 
         });
     }
     
@@ -132,7 +134,7 @@ class Blockchain {
                         "address": address,
                         "signature": signature
                     });
-                    self._addBlock(block).then(b => resolve(b)).catch(e => reject("bar"));
+                    self._addBlock(block).then(b => resolve(b)).catch(e => reject());
                 };
             } else {
                 reject();
