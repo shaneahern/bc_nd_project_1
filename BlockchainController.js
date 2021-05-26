@@ -124,13 +124,12 @@ class BlockchainController {
     validateStarsChain() {
         this.app.get("/validateChain", async (req, res) => {
             try {
-                let errorLog = await this.blockchain.validateChain();
-                if(errorLog.length == 0){
+                this.blockchain.validateChain().then(() => {
                     return res.status(200).json(true);
-                } else {
+                }).catch(errorLog => {
                     errorLog.forEach(e => console.log(e))
                     return res.status(404).send(false);
-                }
+                });                
             } catch (error) {
                 return res.status(500).send("An error happened!");
             }
