@@ -122,10 +122,10 @@ class Blockchain {
     async submitStar(address, message, signature, star) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-            let time = parseInt(message.split(':')[1]);
+            let messageTime = parseInt(message.split(':')[1]);
             let currentTime = self.getCurrentTime();
-            let five_minutes = 60 * 5;
-            if ((currentTime - time) <= five_minutes) {
+            let timeDiffMinutes = Math.floor((currentTime - messageTime) / 60)
+            if (timeDiffMinutes <= 5) {
                 if (bitcoinMessage.verify(message, address, signature)) {
                     let block = new BlockClass.Block({
                         "star": star,
@@ -188,7 +188,12 @@ class Blockchain {
             self.chain.forEach(b => {
                 b.getBData().then(data => {
                     if (data.star &&  address === data.address) {
-                        stars.push(data.star);
+                        let starData = {
+                            "star": data.star,
+                            "owner": data.address,
+
+                        }
+                        stars.push(starData);
                     }    
                 });
             });
