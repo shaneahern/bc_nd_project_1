@@ -81,11 +81,16 @@ class Blockchain {
             height++;
             block.height = height; 
             block.hash = block.generateHash();
-            self.chain.push(block);              
-            self.height = height;
+            self.chain.push(block);
             self.validateChain()
-                .then(() => resolve(block))
-                .catch(errorLog => reject(errorLog)); 
+                .then(() => {                              
+                    self.height = height;
+                    resolve(block);
+                })
+                .catch(errorLog => {
+                    self.chain.pop();
+                    reject(errorLog);
+                }); 
         });
     }
     
