@@ -22,6 +22,10 @@ class Block {
 		this.time = 0;                                              // Timestamp for the Block creation
 		this.previousBlockHash = null;                              // Reference to the previous Block Hash
     }
+
+    generateHash() {
+        return SHA256(JSON.stringify(this)).toString();
+    }
     
     /**
      *  validate() method will validate if the block has been tampered or not.
@@ -35,7 +39,7 @@ class Block {
      *  5. Resolve true or false depending if it is valid or not.
      *  Note: to access the class values inside a Promise code you need to create an auxiliary value `let self = this;`
      */
-    validate() {
+    async validate() {
         let self = this;
         return new Promise((resolve, reject) => {
             // Save in auxiliary variable the current block hash
@@ -45,6 +49,15 @@ class Block {
             // Returning the Block is not valid
             
             // Returning the Block is valid
+            let hashAux = self.hash
+            self.hash = null
+            let recalcHash = self.generateHash()
+            if (recalcHash === hashAux) {
+                self.hash = hashAux
+                resolve();
+            } else {
+                reject(`recalculated hash ${recalcHash} !== currentHash ${currentHash}`);
+            }
 
         });
     }
@@ -64,7 +77,14 @@ class Block {
         // Parse the data to an object to be retrieve.
 
         // Resolve with the data if the object isn't the Genesis block
-
+        let self = this;
+        return new Promise((resolve, reject) => {
+            if (self.height > 0) {
+                resolve(JSON.parse(hex2ascii(this.body)).data);
+            } else {
+                reject();
+            }
+        });
     }
 
 }
