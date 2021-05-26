@@ -128,11 +128,9 @@ class Blockchain {
             if ((currentTime - time) <= five_minutes) {
                 if (bitcoinMessage.verify(message, address, signature)) {
                     let block = new BlockClass.Block({
-                        data: {
-                            "star": star,
-                            "address": address,
-                            "signature": signature
-                        }
+                        "star": star,
+                        "address": address,
+                        "signature": signature
                     });
                     self._addBlock(block).then(b => resolve(b)).catch(e => reject("bar"));
                 };

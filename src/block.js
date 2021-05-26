@@ -80,7 +80,7 @@ class Block {
         let self = this;
         return new Promise((resolve, reject) => {
             if (self.height > 0) {
-                resolve(JSON.parse(hex2ascii(this.body)).data);
+                resolve(JSON.parse(hex2ascii(this.body)));
             } else {
                 reject();
             }
