@@ -156,7 +156,7 @@ class Blockchain {
                     resolve(b);
                 }
            });
-           reject("not found");
+           resolve(null);
         });
     }
 
