@@ -124,7 +124,7 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
             let time = parseInt(message.split(':')[1]);
             let currentTime = self.getCurrentTime();
-            let five_minutes = 60 * 15;
+            let five_minutes = 60 * 5;
             if ((currentTime - time) <= five_minutes) {
                 if (bitcoinMessage.verify(message, address, signature)) {
                     let block = new BlockClass.Block({
@@ -183,7 +183,7 @@ class Blockchain {
      * Remember the star should be returned decoded.
      * @param {*} address 
      */
-    getStarsByWalletAddress (address) {
+    getStarsByWalletAddress(address) {
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
